@@ -84,7 +84,7 @@ export default function Home() {
         id: orderCounter,
         name,
         items: selectedItems,
-        timer: 180, // 3 minutes in seconds
+        timer: 120, // 2 minutes in seconds
         ready: false,
         dinged: false,
       },
@@ -178,7 +178,7 @@ export default function Home() {
         {orders.length === 0 && <p>No orders yet!</p>}
         <ul>
           {orders.map((order) => (
-            <li key={order.id} className={styles.orderItem}>
+            <li key={order.id} className={`${styles.orderItem} ${order.ready ? styles.orderItemReady : ''}`}>
               <span className={styles.orderNumber}>#{order.id}</span>
               <span className={styles.orderName}>{order.name}</span>
               <span className={styles.orderItems}>
@@ -186,7 +186,7 @@ export default function Home() {
                   MENU_ITEMS.find((i) => i.id === itemId)?.label
                 ).join(", ")}
               </span>
-              <span className={styles.orderTimer}>{formatTime(order.timer)}</span>
+              <span className={`${styles.orderTimer} ${order.ready ? styles.orderTimerReady : ''}`}>{formatTime(order.timer)}</span>
               <button
                 className={styles.deleteOrderBtn}
                 onClick={() => deleteOrder(order.id)}
