@@ -6,13 +6,12 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
+  min-height: 100vh;
+  background: linear-gradient(rgba(245,245,245,0.95), rgba(245,245,245,0.95)), url('/next.svg') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
+  padding: 0;
   font-family: var(--font-geist-sans);
 }
 
@@ -164,5 +163,177 @@ a.secondary {
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
+  }
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 2rem 0 1rem 0;
+  color: #2d2d2d;
+  text-shadow: 1px 1px 4px #fff;
+}
+
+.orderForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  background: #8E9AAF;
+  color: #000;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  max-width: 900px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.input {
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #bbb;
+  outline: none;
+  width: 180px;
+  background: #fff;
+  color: #111;
+}
+
+.menuItems {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  max-width: 320px;
+  row-gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.menuItem, .menuItemSelected {
+  font-size: 1.1rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  flex: 1 1 110px;
+  min-width: 90px;
+  max-width: 100%;
+  margin: 0;
+}
+
+.menuItemSelected {
+  background: orange;
+  color: #fff;
+}
+
+.addOrderBtn {
+  font-size: 1.2rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 1.2rem;
+  border: none;
+  background: #4caf50;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(76,175,80,0.12);
+  transition: background 0.2s;
+}
+.addOrderBtn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.ordersList {
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+}
+.ordersList h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+.ordersList ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.orderItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.98);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  margin-bottom: 1.2rem;
+  padding: 1.2rem 1.5rem;
+  gap: 1rem;
+  transition: box-shadow 0.2s;
+}
+.orderItem:hover {
+  box-shadow: 0 4px 18px rgba(0,0,0,0.16);
+}
+.orderNumber {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ff9800;
+  margin-right: 1rem;
+}
+.orderName {
+  font-size: 1.1rem;
+  color: #333;
+  margin-right: 1rem;
+}
+.orderItems {
+  font-size: 1rem;
+  color: #666;
+  margin-right: 1rem;
+}
+.orderTimer {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2196f3;
+  margin-right: 1rem;
+  min-width: 60px;
+  text-align: center;
+}
+.deleteOrderBtn {
+  font-size: 1rem;
+  padding: 0.4rem 1rem;
+  border-radius: 0.8rem;
+  border: none;
+  background: #f44336;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(244,67,54,0.10);
+  transition: background 0.2s;
+}
+.deleteOrderBtn:hover {
+  background: #d32f2f;
+}
+
+@media (max-width: 700px) {
+  .orderForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+  .menuItems {
+    max-width: 100vw;
+    justify-content: flex-start;
+  }
+  .ordersList {
+    max-width: 98vw;
+  }
+  .orderItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem;
   }
 }

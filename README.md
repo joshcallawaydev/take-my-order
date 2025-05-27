@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Take My Order
+
+A playful webapp for my 7-year-old daughter, Zara, to run her own drive-through in her playhouse!
+
+## Project Purpose
+
+This is a simple, one-page web application designed for children to play "drive-through" at home. The app allows Zara to take orders, assign order numbers, and notify when an order is ready with a fun sound. It's meant to be intuitive, colorful, and easy for a child to use.
+
+## Features
+
+- **Order Taking:**  
+  - Enter the customer's name.
+  - Select items to order (e.g., burgers, fries, drinks—customizable).
+  - Click "Add Order" to submit.
+
+- **Order Management:**  
+  - Each order receives a unique order number.
+  - Orders appear in a list with:
+    - Customer name
+    - Ordered items
+    - Order number
+    - Countdown timer until the order is ready
+
+- **Order Ready Notification:**  
+  - When the timer reaches zero, the app plays a "bing" sound to alert that the order is ready.
+
+- **Order Removal:**  
+  - Each order in the list has a delete button to remove it once completed.
+
+## User Experience
+
+- **One-page app:** All interactions happen on a single screen.
+- **Kid-friendly:** Large buttons, clear labels, and fun colors.
+- **No authentication or backend required:** All state can be managed in-memory for simplicity.
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+3. **Open your browser:**  
+   Visit [http://localhost:3000](http://localhost:3000) to use the app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Customization
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Menu Items:**  
+  You can easily change the available order items in the code to match Zara's favorite foods.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Order Ready Sound:**  
+  Place a `bing.mp3` or similar sound file in the `public/` directory and update the code to use it.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- [Next.js](https://nextjs.org/) (React framework)
+- TypeScript
+- CSS Modules
 
-To learn more about Next.js, take a look at the following resources:
+## Future Ideas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Add images for menu items
+- Allow custom timer durations
+- Save orders in local storage
