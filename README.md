@@ -23,9 +23,19 @@ This is a simple, one-page web application designed for children to play "drive-
 
 - **Order Ready Notification:**  
   - When the timer reaches zero, the app plays a "bing" sound to alert that the order is ready.
+  - Visual pulsating border animation highlights ready orders.
+  - Audio works in production environments (requires user interaction to enable).
 
 - **Order Removal:**  
   - Each order in the list has a delete button to remove it once completed.
+
+## Audio Features
+
+- **Production-Ready Audio:** Works on Vercel and other hosting platforms.
+- **Browser Compatibility:** Uses Web Audio API with audio file fallback.
+- **User Interaction Required:** Audio is enabled after the first button click (browser requirement).
+- **Visual Feedback:** Ready orders have pulsating orange borders and highlighted timers.
+- **Multiple Audio Formats:** Supports WAV, AIFF, MP3, and OGG for maximum compatibility.
 
 ## User Experience
 

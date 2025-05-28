@@ -21,53 +21,104 @@ export default function Home() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [orderCounter, setOrderCounter] = useState(1);
+  const [audioEnabled, setAudioEnabled] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  // Initialize audio context on first user interaction
+  const initializeAudio = async () => {
+    if (!audioEnabled) {
+      try {
+        // Initialize Web Audio Context
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContextClass) {
+          audioContextRef.current = new AudioContextClass();
+          if (audioContextRef.current.state === 'suspended') {
+            await audioContextRef.current.resume();
+          }
+        }
+
+        // Try to load and prepare the audio element
+        if (audioRef.current) {
+          try {
+            await audioRef.current.load();
+            // Test play and immediately pause to "unlock" audio
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+              await playPromise;
+              audioRef.current.pause();
+              audioRef.current.currentTime = 0;
+            }
+          } catch (error) {
+            console.log('Audio element initialization failed, will use Web Audio API');
+          }
+        }
+
+        setAudioEnabled(true);
+        console.log('Audio initialized successfully');
+      } catch (error) {
+        console.log('Audio initialization failed:', error);
+      }
+    }
+  };
 
   // Create a beep sound using Web Audio API as fallback
-  const playBeep = () => {
+  const playBeep = async () => {
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
+      if (!audioContextRef.current) {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        audioContextRef.current = new AudioContextClass();
+      }
+
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
+
+      const oscillator = audioContextRef.current.createOscillator();
+      const gainNode = audioContextRef.current.createGain();
       
       oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+      gainNode.connect(audioContextRef.current.destination);
       
       oscillator.frequency.value = 800; // Frequency in Hz
       oscillator.type = 'sine';
       
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      gainNode.gain.setValueAtTime(0.3, audioContextRef.current.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.5);
       
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.5);
+      oscillator.start(audioContextRef.current.currentTime);
+      oscillator.stop(audioContextRef.current.currentTime + 0.5);
     } catch (error) {
-      console.log('Could not play audio notification');
+      console.log('Could not play audio notification:', error);
     }
   };
 
   // Play notification sound
-  const playNotification = () => {
+  const playNotification = async () => {
+    if (!audioEnabled) {
+      console.log('Audio not enabled - user interaction required first');
+      return;
+    }
+
     // Try Web Audio API first (most reliable)
     try {
-      playBeep();
+      await playBeep();
     } catch (error) {
       // If Web Audio fails, try the audio element
       if (audioRef.current) {
         try {
           audioRef.current.currentTime = 0;
-          audioRef.current.play().catch(() => {
-            console.log('All audio methods failed');
-          });
+          await audioRef.current.play();
         } catch (error) {
-          console.log('Audio element failed');
+          console.log('All audio methods failed:', error);
         }
       }
     }
   };
 
-  // Handle menu item selection
-  const toggleItem = (itemId: string) => {
+  // Handle menu item selection and initialize audio on first interaction
+  const toggleItem = async (itemId: string) => {
+    await initializeAudio();
     setSelectedItems((prev) =>
       prev.includes(itemId)
         ? prev.filter((id) => id !== itemId)
@@ -75,9 +126,12 @@ export default function Home() {
     );
   };
 
-  // Add new order
-  const addOrder = () => {
+  // Add new order and initialize audio
+  const addOrder = async () => {
     if (!name || selectedItems.length === 0) return;
+    
+    await initializeAudio();
+    
     setOrders((prev) => [
       ...prev,
       {
@@ -139,6 +193,20 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Take My Order</h1>
+      {!audioEnabled && (
+        <div style={{
+          background: '#fff3cd',
+          border: '1px solid #ffeaa7',
+          borderRadius: '8px',
+          padding: '12px',
+          margin: '0 auto 20px auto',
+          maxWidth: '600px',
+          textAlign: 'center',
+          color: '#856404'
+        }}>
+          🔊 Click any button to enable audio notifications
+        </div>
+      )}
       <section className={styles.orderForm}>
         <h2>New Order</h2>
         <input
@@ -146,6 +214,7 @@ export default function Home() {
           placeholder="Customer name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onFocus={initializeAudio}
           className={styles.input}
         />
         <div className={styles.menuItems}>
@@ -200,8 +269,11 @@ export default function Home() {
       {/* Audio element for 'ding' sound with error handling */}
       <audio 
         ref={audioRef} 
-        preload="auto"
+        preload="metadata"
+        playsInline
+        muted={false}
         onError={() => console.log('Audio file failed to load, using fallback beep')}
+        onCanPlayThrough={() => console.log('Audio file loaded successfully')}
       >
         <source src="/notification.aiff" type="audio/aiff" />
         <source src="/notification.mp3" type="audio/mpeg" />
