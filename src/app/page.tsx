@@ -84,7 +84,7 @@ export default function Home() {
         id: orderCounter,
         name,
         items: selectedItems,
-        timer: 120, // 2 minutes in seconds
+        timer: 60, // 1 minute in seconds
         ready: false,
         dinged: false,
       },
